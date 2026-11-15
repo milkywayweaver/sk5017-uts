@@ -7,32 +7,47 @@ import seaborn as sns
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from modules.autolog import ASLT
-from sklearn.cluster import DBSCAN
+from sklearn.neighbors import LocalOutlierFactor
 from sklearn.preprocessing import StandardScaler,OrdinalEncoder
 from sklearn.decomposition import PCA
 from copy import deepcopy
 
 class OutlierRemover():
     '''
-    Removes outlier by using DBSCAN.fit
+    Removes outlier by using LOF.
     '''
-    def __init__(self,**dbscan_kwargs):
+    def __init__(self,target=['sex'],n_neighbors=20):
         self._pl = Pipeline([
             ('scaler',StandardScaler()),
-            ('cluster',DBSCAN(**dbscan_kwargs))
+            ('outlier',LocalOutlierFactor(novelty=True,n_neighbors=n_neighbors))
         ])
+        self.target = target
+
+    def fit(self,df:pd.DataFrame):
+        self.is_fitted = True
+        self._pl.fit(df.drop(self.target,axis=1))
+
+    def transform(self,df:pd.DataFrame):
+        if not hasattr(self,'is_fitted'):
+            raise AttributeError('The module has not been fitted. Fit first!')
+        self.outliers = self._pl.predict(df.drop(self.target,axis=1))
+        self.outliers = np.where(self.outliers == -1,1,0).astype(bool)
+        df_dropped = df[~self.outliers]
+        return df_dropped,self.outliers
 
     def fit_transform(self,df:pd.DataFrame):
-        self.df = df
-        self.outliers = self._pl.fit_predict(self.df.drop('sex',axis=1))
-        self.outliers = np.where(self.outliers == -1,1,0).astype(bool)
+        self.fit(df)
+        return self.transform(df)
 
-        df_dropped = self.df[~self.outliers]
-        return df_dropped
+    def __len__(self):
+        if not hasattr(self,'is_fitted'):
+            raise AttributeError('The module has not been fitted. Fit first!')
+        return self.outliers.sum()
 
-    def outlier_pairplot(self):
-        self.df['outliers'] = self.outliers
-        sns.pairplot(self.df,hue='outliers')
+    def outlier_pairplot(self,df:pd.DataFrame,outliers:pd.Series):
+        _df = df.copy()
+        _df['outliers'] = outliers
+        sns.pairplot(_df,hue='outliers')
         plt.show()
 
 class Preprocessor():
