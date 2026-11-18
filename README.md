@@ -55,6 +55,27 @@ Dari tabel dan gambar di atas, dapat dilihat bahwa kedua model memiliki kesulita
 
 Pada dataset ini, kedua model tampak memiliki performa yang cukup setara. Keunggulan RF yaitu tidak begitu terdampak oleh data pencilan dan skala fitur tidak terlalu terlihat karena data telah dibersihkan dan dinormalisasi. 
 
+# **Regresi**
+Pada bagian ini, dua model regresi `LinearRegression` dan `Lasso` akan digunakan untuk memprediksi jumlah cincin (`rings`) pada abalone. Tahapan pembersihan dan praproses data sama dengan bagian klasifikasi. Untuk pelatihan model, Optuna kembali digunakan dengan ruang cari sebagai berikut.
+
+| Bagian | _Hyperparameter_ | Rentang Nilai |
+| ---   | ---              | ---           |
+| Praproses | `ASLT beta` | [-50, 50] |
+| Praproses | `PCA n_components` | [2, Jumlah fitru numerik data] |
+| Lasso | `alpha` | [0, 10] |
+| Lasso | `selection` | [`cyclic`, `random`] |
+
+**Hasil**
+| Model | RMSE | MSE | MAPE | R2 |
+| --- | --- | --- | --- | --- |
+|Linear Regression|	2.328315|	5.421053|	0.152454|	0.499220|
+|LASSO Regression|	2.517166|	6.336124|	0.159768|	0.414688|
+
+Dari hasil tersebut, dapat dilihat bahwa regresi linear biasa tampak lebih baik dibanding model Lasso dari seluruh metrik. Meski begitu, karena jumlah cincin merupakan bilangan bulat, kedua model memiliki galat yang cukup serupa, sekitar 2 untuk regresi linear dan 3 untuk lasso (dari pembulatan RMSE). Gambar 2.1 menunjukkan perbedaan hasil dari kedua model jika dibandingkan dengan jumlah cincin sebenarnya. Dari gambar kiri, lasso tampak memiliki distribusi yang lebih ramping dibanding regresi linear biasa, tetapi dengan rata-rata yang cukup bergeser dari rata-rata sebenarnya. Distribusi jumlah cincin sebenarnya juga memiliki ekor yang cukup panjang di sebelah kanan. Gambar di sebelah kanan menunjukkan distribusi kumulatif perbedaan antara hasil prediksi model dengan nilai sebenarnya. Dari gambar tersebut, dapat dilihat bahwa sekitar 70% hasil prediksi memiliki 2 atau kurang, dan 90% hasil prediksi memiliki galat 4 atau kurang.
+
+<img width="1189" height="509" alt="image" src="https://github.com/user-attachments/assets/d96a6111-6f2a-4fa0-8a1f-bf10749d68f3" />
+Gambar 2.1. Distribusi prediksi cincin abalone.
+
 
 # **Referensi**
 [1] Feng, Q., Hannig, J., & Marron, J. S. (2016). A note on automatic data transformation. Stat, 5(1), 82-87.
