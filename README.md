@@ -76,6 +76,16 @@ Dari hasil tersebut, dapat dilihat bahwa regresi linear biasa tampak lebih baik 
 <img width="1189" height="509" alt="image" src="https://github.com/user-attachments/assets/d96a6111-6f2a-4fa0-8a1f-bf10749d68f3" />
 Gambar 2.1. Distribusi prediksi cincin abalone.
 
+Jika _correlation map_ data dilihat (gambar 2.2), dapat diperhatikan bahwa fitur `sex` memiliki korelasi yang mendekati 0 dengan `rings`. Jika fitur `sex` dibuang, galat model yang diberikan naik untuk regresi linear biasa dan turun untuk Lasso. Hal ini mengindikasikan regresi linear yang dapat memanfaatkan fitur `sex` untuk prediksinya. Model lasso tampak kurang cocok pada dataset ini yang memiliki jumlah fitur yang relatif sedikit. Kemungkinan, sedikitnya jumlah fitur ini membuat regresi lasso tidak bisa memanfaatkan keunggulannya dalam memberikan bobot pada setiap koefisien.
+
+<img width="590" height="490" alt="image" src="https://github.com/user-attachments/assets/0d7a7355-2e0b-4acb-a83b-017fb7b3780e" />
+
+Gambar 2.2. _Correlation map_ data abalone.
+
+| Model |	RMSE | MSE | MAPE | R2 |
+| --- | --- | --- | --- | --- |
+|Linear Regression|	2.357671|	5.558612|	0.152759|	0.486512|
+|LASSO Regression|	2.370825|	5.620813|	0.146680|	0.480766|
 
 # **Referensi**
 [1] Feng, Q., Hannig, J., & Marron, J. S. (2016). A note on automatic data transformation. Stat, 5(1), 82-87.
