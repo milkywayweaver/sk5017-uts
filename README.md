@@ -87,5 +87,31 @@ Gambar 2.2. _Correlation map_ data abalone.
 |Linear Regression|	2.357671|	5.558612|	0.152759|	0.486512|
 |LASSO Regression|	2.370825|	5.620813|	0.146680|	0.480766|
 
+# **_Clustering_**
+Pada bagian ini, tida metode _clustering_ digunakan untuk mengelompokkan data abalone:  _k-means clustering_, _spectral clustering_, dan _hierarchical clustering_. Terdapat dua sub-bagian pada bagian ini: _clustering_ pada jenis kelamin (`sex`) dan pada jumlah cincin (`ring`). _Hierarchical clustering_ dilakukan secara _bottom-up_ dengan modul `AgglomerativeClustering`. Sama seperti bagian-bagian sebelumnya, proses pembersihan dan praproses data dilakukan dengan metode serupa. Jumlah cincin yang berupa bilangan bulat dikelompokkan menjadi 6 kelompok dalam rentang `[0, 5, 10, 15, 20, 25, 30]`. Kemudian, Optuna kembali digunakan untuk melakukan _hyperparameter tuning_ dengan ruang cari berikut.
+
+| Bagian | _Hyperparameter_ | Rentang Nilai |
+| ---   | ---              | ---           |
+| Praproses | `ASLT beta` | [-50, 50] |
+| Praproses | `PCA n_components` | [2, Jumlah fitru numerik data] |
+| K-Means | `n_clusters` | [2, 11] |
+| _Spectral clustering_ | `affinity` | [`rbf`, `nearest_neighbors`] |
+| _Spectral clustering_ | `n_clusters` | [2, 11] |
+| _Hierarchical clustering_ | `metric` | [`euclidean`, `l1`, `l2`, `cosine`] |
+| _Hierarchical clustering_ | `linkage` | [`ward`, `complete`, `average`, `single`] |
+| _Hierarchical clustering_ | `n_clusters` | [2, 11] |
+
+Berikut adalah hasil untuk pengecekan jenis kelamin dengan _clustering_.
+|Model|	ARI|	Homogenity|	Completeness|	V Measure|	Silhouette|
+| --- | --- | --- | --- | --- | --- |
+|KMeans (`n_clusters=2`)|	0.191320|	0.143200|	0.232551|	0.177252|	0.248919|
+|SpectralClustering (`n_clusters=3`)|	0.166365|	0.153057|	0.199754|	0.173315|	0.121965|
+|AgglomerativeClustering (`n_clusters=2`)|	0.211069|	0.164154|	0.272834|	0.204980|	0.328393|
+
+Dari tabel tersebut, dapat dilihat bahwa hasil _clustering_ dari metode _hierarchical clustering_ memiliki performa yang terbaik, dan _spectral clustering_ memiliki performa yang terburuk. Kemungkinan, hal ini disebabkan karena jumlah _cluster_ terbaik yang diperoleh, dimana K-Means dan _hierarchical clustering_ sama-sama memiliki 2 _cluster_ sedangkan _spectral clustering_ memiliki 3 _cluster_. Jika dilihat scatterplot_ dari hasil _hierarchical clustering_, dapat dilihat bahwa kedua _decision boundary_ kedua _cluster_ tampak memisahkan _infant_ dan bukan _infant_, tetapi tidak bisa membedakan _male_ dan _female_. Hal ini cukup wajar karena titik-titik data _male_ dan _female_ yang saling tumpah tindih.
+
+<img width="2044" height="1965" alt="image" src="https://github.com/user-attachments/assets/1ccda5ad-c8b7-4185-9ff4-3269f58474b9" />
+Gambar 3.1. _Pairplot_ prediksi _hierarchical clustering_ untuk pengelompokan jenis kelamin.
+
 # **Referensi**
 [1] Feng, Q., Hannig, J., & Marron, J. S. (2016). A note on automatic data transformation. Stat, 5(1), 82-87.
