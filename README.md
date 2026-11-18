@@ -105,13 +105,24 @@ Berikut adalah hasil untuk pengecekan jenis kelamin dengan _clustering_.
 |Model|	ARI|	Homogenity|	Completeness|	V Measure|	Silhouette|
 | --- | --- | --- | --- | --- | --- |
 |KMeans (`n_clusters=2`)|	0.191320|	0.143200|	0.232551|	0.177252|	0.248919|
-|SpectralClustering (`n_clusters=3`)|	0.166365|	0.153057|	0.199754|	0.173315|	0.121965|
-|AgglomerativeClustering (`n_clusters=2`)|	0.211069|	0.164154|	0.272834|	0.204980|	0.328393|
+|_Spectral clustering_ (`n_clusters=3`)|	0.166365|	0.153057|	0.199754|	0.173315|	0.121965|
+|_Hierarchical clustering_ (`n_clusters=2`)|	0.211069|	0.164154|	0.272834|	0.204980|	0.328393|
 
-Dari tabel tersebut, dapat dilihat bahwa hasil _clustering_ dari metode _hierarchical clustering_ memiliki performa yang terbaik, dan _spectral clustering_ memiliki performa yang terburuk. Kemungkinan, hal ini disebabkan karena jumlah _cluster_ terbaik yang diperoleh, dimana K-Means dan _hierarchical clustering_ sama-sama memiliki 2 _cluster_ sedangkan _spectral clustering_ memiliki 3 _cluster_. Jika dilihat scatterplot_ dari hasil _hierarchical clustering_, dapat dilihat bahwa kedua _decision boundary_ kedua _cluster_ tampak memisahkan _infant_ dan bukan _infant_, tetapi tidak bisa membedakan _male_ dan _female_. Hal ini cukup wajar karena titik-titik data _male_ dan _female_ yang saling tumpah tindih.
+Dari tabel tersebut, dapat dilihat bahwa hasil _clustering_ dari metode _hierarchical clustering_ memiliki performa yang terbaik, dan _spectral clustering_ memiliki performa yang terburuk. Kemungkinan, hal ini disebabkan karena jumlah _cluster_ terbaik yang diperoleh, dimana K-Means dan _hierarchical clustering_ sama-sama memiliki 2 _cluster_ sedangkan _spectral clustering_ memiliki 3 _cluster_. Jika dilihat _scatterplot_ dari hasil _hierarchical clustering_, dapat dilihat bahwa kedua _decision boundary_ kedua _cluster_ tampak memisahkan _infant_ dan bukan _infant_, tetapi tidak bisa membedakan _male_ dan _female_. Hal ini cukup wajar karena titik-titik data _male_ dan _female_ yang saling tumpah tindih.
 
 <img width="2044" height="1965" alt="image" src="https://github.com/user-attachments/assets/1ccda5ad-c8b7-4185-9ff4-3269f58474b9" />
 Gambar 3.1. _Pairplot_ prediksi _hierarchical clustering_ untuk pengelompokan jenis kelamin.
+
+Berikut adalah hasil untuk pengecekan jumlah cincin dengan _clustering_.
+|Model|	ARI	|Homogenity	|Completeness|	V Measure|	Silhouette|
+|KMeans (`n_clusters=2`)|	0.158373|	0.119023|	0.177888|	0.142620|	0.430039|
+|_Spectral clustering_ (`n_clusters=3`)|	0.149982|	0.117052|	0.115499|	0.116270|	0.361821|
+|_Hierarchical clustering_(`n_clusters=6`)|0.180401|	0.137193|	0.141666|	0.139394|	0.020884|
+
+Dari tabel tersebut, dapat dilihat bahwa hasil terbaik diperoleh dari _hierarchical clustering_, sedangkan K-Means dan _spectral clustering_ tidak terlalu berbeda jauh. Meski begitu, skor _silhouette_ dari _hierarchical clustering_ adalah yang terendah. Artinya, _cluster-cluster_ yang dihasilkan menyebar secara jarak pada ruang parameternya. Jika dilihat dari _scatterplot_-nya, tampak terdapat dua _cluster_ yang dominan di antara keenam _cluster_ yang dihasilkan _hierarchical clustering_. Kedua _cluster_ dominan ini sama-sama menunjukkan perbedaan kelas `sex` _infant_ dan non-_infnat_. Hal ini juga sangat wajar karena satu-satunya distribusi fitur yang memiliki perbedaan besar adalah kelas `sex` _infant_ dan non-_infant_.
+
+<img width="2044" height="1965" alt="image" src="https://github.com/user-attachments/assets/f5eb9abe-b5a7-4faf-9538-f4cce884732a" />
+Gambar 3.2. _Pairplot_ prediksi _hierarchical clustering_ untuk pengelompokan jumlah cincin.
 
 # **Referensi**
 [1] Feng, Q., Hannig, J., & Marron, J. S. (2016). A note on automatic data transformation. Stat, 5(1), 82-87.
